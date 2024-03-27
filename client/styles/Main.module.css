@@ -1,0 +1,202 @@
+.MainBlock {
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+}
+.NavBar {
+    width: 100%;
+    text-align: center;
+}
+.Component {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+}
+
+.test {
+    background-color: #b3c50b;
+}
+.fieldset {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    box-shadow: 0 3px 7px 0 rgba(0,0,0,0.13),
+    0 1px 2px 0 rgba(0,0,0,0.11);
+}
+
+.controlPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+    max-height: 430px;
+}
+
+.radioName {
+    margin: 3px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.radioControl {
+    cursor: pointer;
+    margin-right: 9px;
+    width: 1.15em;
+    height: 1.15em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.radioControl::before {
+    content: '';
+    position: absolute;
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #0190DB;
+}
+
+.radioControl:checked::after {
+    content: '';
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background-color: #0190DB;
+    transform: translate(65%, 65%);
+    visibility: visible;
+}
+
+.CheckBox:checked {
+    background-color: red;
+    color: red;
+    border-color: red;
+}
+
+.ButtonCreateTodo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 3px 7px 0 rgba(0,0,0,0.13),
+    0 1px 2px 0 rgba(0,0,0,0.11);
+    padding: 10px;
+    color: white;
+    background-color: #0091DC;
+    margin: 0;
+}
+.ButtonCreateTodo:hover {
+    background-color: #005F89;
+}
+
+.ViewHeading {
+    font-size: 14px;
+}
+.HeaderButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.EditAndDeleteButtons {
+    margin: 0 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+/*TodoList*/
+.todoList {
+    width: 100%;
+    margin-left: 15px;
+}
+.ButtonHeader {
+    margin-bottom: 20px;
+}
+.Card {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 0 20px;
+    background-color: #FFFFFF;
+    box-shadow: 0 3px 7px 0 rgba(0,0,0,0.13),
+    0 1px 2px 0 rgba(0,0,0,0.11);
+}
+
+.ButtonSave {
+    padding: 10px;
+    color: white;
+    background-color: #0091DC;
+    margin-bottom: 0;
+}
+
+.ButtonBack {
+    padding: 15px;
+    margin: 0 0 10px;
+}
+
+.ButtonSave:hover {
+    background-color: #005F89;
+}
+
+.Loader {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.EditButton {
+    color: white;
+    background-color: #0091DC;
+}
+.EditButton:hover {
+    background-color: #005F89;
+}
+
+.DelButton {
+    color: white;
+    background-color: #F34949;
+}
+
+.DelButton:hover {
+    background-color: #B43636;
+}
+
+@media screen and (max-width: 600px) {
+    .Component {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        width: 100%;
+    }
+    .controlPanel {
+        order: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 300px;
+        max-height: 430px;
+    }
+    .todoList {
+        order: 2;
+        width: 100%;
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+

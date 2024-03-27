@@ -1,0 +1,117 @@
+.todoList {
+    width: 100%;
+    margin-left: 15px;
+}
+.ButtonHeader {
+    margin-bottom: 20px;
+}
+
+.Card {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 0 20px;
+    background-color: #FFFFFF;
+    box-shadow: 0 3px 7px 0 rgba(0,0,0,0.13),
+    0 1px 2px 0 rgba(0,0,0,0.11);
+}
+
+.CardName {
+    cursor: pointer;
+    width: max-content;
+    list-style-type: none;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #3D3D3D;
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+.CardName:hover{
+    color: #0091DC;
+}
+.CardInfo {
+    width: max-content;
+    list-style-type: none;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+
+/*EditTodo*/
+.EditPanel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.ButtonBack {
+    padding: 15px;
+    margin: 0 0 10px;
+}
+
+.ButtonBack:hover {
+    background-color: #CEC1C7;
+}
+
+.ButtonSave {
+    padding: 10px;
+    color: white;
+    background-color: #0091DC;
+    margin-bottom: 0;
+}
+
+.ButtonSave:hover {
+    background-color: #005F89;
+}
+
+.EditCard {
+    flex: 1;
+    padding: 10px 30px 30px;
+    margin-bottom: 40px;
+}
+
+.InputEditName {
+    border-radius: 4px;
+    border: 1px solid #AFAFAF;
+    padding: 8px 12px;
+    font-size: 18px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+}
+.InputEditName:focus-visible {
+    outline-color: #00C2FF;
+}
+
+.SelectPriorityAndMarks {
+    font-size: 14px;
+    margin: 0 0 5px;
+    max-width: 300px;
+}
+
+.EditTableMArks {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    box-sizing: border-box;
+}
+
+.MarkName {
+    cursor: pointer;
+    transition: all 0.5s ease;
+    border-radius: 2px;
+    margin-bottom: 2px;
+}
+
+
+.EditDescription {
+    height: 100%;
+    resize: none;
+    margin-bottom: 10px;
+}
