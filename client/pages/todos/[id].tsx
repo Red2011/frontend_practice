@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import {Mark, Todo} from "@/types/todo";
 import Fetch from "@/components/fetch/fetch";
-import todoStyles from "@/components/Todo/todo.module.css"
+import todoStyles from "@/styles/todo.module.css"
 import styles from "@/styles/Main.module.css";
 import {useRouter} from "next/router";
 import {format} from "date-fns";

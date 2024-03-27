@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "./todo.module.css"
+import styles from "../../styles/todo.module.css"
 import {TodoItemProps} from "@/types/todo";
 import {useRouter} from "next/router";
 import { format } from 'date-fns';

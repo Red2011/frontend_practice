@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './truewindow.module.css'
+import styles from '../../styles/truewindow.module.css'
 
 
 interface Windows {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import styles from "@/components/Todo/todo.module.css";
+import styles from "@/styles/todo.module.css";
 import {Marks, Priorities, Todo, TodoItemProps} from "@/types/todo";
 import {useRouter} from "next/router";
 import TrueWindow from "@/components/TrueWindow/TrueWindow";
