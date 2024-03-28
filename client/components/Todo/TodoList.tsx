@@ -12,7 +12,7 @@ const TodoList:React.FC<TodoListProps> = ({todos}) => {
         if (todos.length > 0) {
             return (
                 todos.map(todo =>
-                        <TodoItem
+                    <TodoItem
                             key={todo._id}
                             todo = {todo}
                         />

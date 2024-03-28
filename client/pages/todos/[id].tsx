@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import {Mark, Todo} from "@/types/todo";
 import Fetch from "@/components/fetch/fetch";
@@ -12,9 +12,13 @@ import TrueWindow from "@/components/TrueWindow/TrueWindow";
 export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter()
     const {id} = router.query;
-    const formattedDate = format(todo.creation_date, 'd MMMM yyyy, HH:mm', {locale: ru});
+    const [formattedDate, setFormattedDate] = useState<string>()
     const description  = todo.description.length > 0 ? todo.description: "...";
     const url = `http://localhost:5000/todos/${id}`;
+
+    useEffect(() => {
+        setFormattedDate(format(todo.creation_date, 'd MMMM yyyy, HH:mm', {locale: ru}))
+    }, []);
 
     const Window:{check: boolean, visibility: 'hidden'|'visible'}  = {
         check: true,
@@ -52,6 +56,9 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
             setChangeWindow({...changeWindow, visibility: 'hidden'})
         }
     }
+
+
+
     return (
         <div className={styles.MainBlock}>
             <TrueWindow check={changeWindow.check} visibility={changeWindow.visibility}/>
@@ -94,7 +101,8 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
 
 export const getServerSideProps: GetServerSideProps = (async ({params}) => {
     try {
-        const todo: Todo = await Fetch('http://localhost:5000/todos/' + params?.id);
+        const API_URL = (process.env.API_URL === undefined) ? "localhost:5000" : process.env.API_URL
+        const todo: Todo = await Fetch(`http://${API_URL}/todos/` + params?.id);
         return {props: {todo}}
     } catch (error) {
         return {

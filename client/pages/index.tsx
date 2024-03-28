@@ -191,13 +191,15 @@ export default function Main({
 
 export const getServerSideProps = (async ({req, res}) => {
     try {
+        console.log(process.env.API_URL)
+        const API_URL = (process.env.API_URL === undefined) ? "localhost:5000" : process.env.API_URL
         const cookies = new Cookies(req, res);
         const cookieDateSort = (cookies.get('date_sort') || "-1");
         const cookiePriorities = (cookies.get('priority') || "")
         const cookieMarks = (cookies.get('marks') || "")
-        const todo: Todo[] = await Fetch(`http://localhost:5000/todos?date_sort=${Number(cookieDateSort)}${decodeURIComponent(cookieMarks).replace(/\s/g, "")}${decodeURIComponent(cookiePriorities).replace(/\s/g, "")}`);
-        const marks: Marks = await Fetch('http://localhost:5000/todos/mark');
-        const priorities: Priorities = await Fetch('http://localhost:5000/todos/priority');
+        const todo: Todo[] = await Fetch(`http://${API_URL}/todos?date_sort=${Number(cookieDateSort)}${decodeURIComponent(cookieMarks).replace(/\s/g, "")}${decodeURIComponent(cookiePriorities).replace(/\s/g, "")}`);
+        const marks: Marks = await Fetch(`http://${API_URL}/todos/mark`);
+        const priorities: Priorities = await Fetch(`http://${API_URL}/todos/priority`);
         return {
             props: {
                 todo,

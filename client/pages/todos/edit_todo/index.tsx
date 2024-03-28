@@ -40,8 +40,9 @@ export default EditTodo;
 
 export const getServerSideProps = (async () => {
     try {
-        const marks: Marks = await Fetch('http://localhost:5000/todos/mark');
-        const priorities: Priorities = await Fetch('http://localhost:5000/todos/priority');
+        const API_URL = (process.env.API_URL === undefined) ? "localhost:5000" : process.env.API_URL
+        const marks: Marks = await Fetch(`http://${API_URL}/todos/mark`);
+        const priorities: Priorities = await Fetch(`http://${API_URL}/todos/priority`);
         return {
             props: {
                 marks,
