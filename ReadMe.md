@@ -6,7 +6,6 @@
 Схема базы данных:
 
 ![img.png](schema.png)
-
 Функции:
 1. Фильтрация: по дате(старые/новые), по приоритету и по отметкам.
     Состояния фильтров сохраняются в cookie и очищаются через 1 минуту (время было выбрано для наглядности работоспособности)
@@ -39,3 +38,6 @@ Open a browser and go to http://localhost:3000
 <div style="background: linear-gradient(to right, mediumvioletred, mediumblue); padding: 20px;  text-align: center; font-family: 'Pacifico', cursive; border-radius: 60px;">
     <span style="color: White;"><strong>Let's Fun!!!</strong></span>
 </div>
+
+## Working
+![web.gif](web.gif)
