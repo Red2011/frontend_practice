@@ -39,5 +39,3 @@ Open a browser and go to http://localhost:3000
     <span style="color: White;"><strong>Let's Fun!!!</strong></span>
 </div>
 
-## Working
-![web.gif](web.gif)
