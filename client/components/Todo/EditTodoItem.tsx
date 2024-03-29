@@ -36,7 +36,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
     }
     const [changedTodo, setChangedTodo] = useState(newTodo)
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-    const [currentValue, setCurrentValue ] = useState("");
+    const [currentValueTextArea, setcurrentValueTextArea ] = useState("");
 
     const Window:{check: boolean, visibility: 'hidden'|'visible'}  = {
         check: true,
@@ -133,7 +133,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
             const scrollHeight = textareaRef.current.scrollHeight;
             textareaRef.current.style.height = scrollHeight + "px";
         }
-    }, [currentValue]);
+    }, [currentValueTextArea]);
 
     return (
         <section className={`${styles.EditPanel}`}>
@@ -169,7 +169,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                           ref={textareaRef}
                           onChange={(e) => {
                               handleChangeTodo(e, 'description')
-                              setCurrentValue(e.target.value);
+                              setcurrentValueTextArea(e.target.value);
                           }}/>
                 <footer>
                     <button  className={`${styles.ButtonSave} ${styles.Card}`} onClick={()=> PutOrPostRequest(serverComponent.url, serverComponent.method, changedTodo)}>Сохранить</button>
