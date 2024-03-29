@@ -1,6 +1,6 @@
 import { type FC, type ReactNode } from 'react'
 import React from 'react'
-import styles from "../styles/layout.module.css"
+import styles from "@/styles/layout.module.css"
 interface layoutProps {
     children: ReactNode
 }

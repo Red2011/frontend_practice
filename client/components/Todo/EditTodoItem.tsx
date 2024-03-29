@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from "@/styles/todo.module.css";
 import {Marks, Priorities, Todo, TodoItemProps} from "@/types/todo";
 import {useRouter} from "next/router";
@@ -23,7 +23,6 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
     const router = useRouter()
     const {id} = router.query;
     const serverComponent = changeServerMethod(typeof id === 'string' ? id : undefined);
-    console.log(serverComponent.method);
     let markList = todo.mark.map(item => item._id)
     markList = markList.length === 1 && markList[0] === "" ? [] : markList;
     const priority = todo.priority._id === "" ? priorities.priorities[0]._id : todo.priority._id
@@ -36,6 +35,9 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         description: todo.description
     }
     const [changedTodo, setChangedTodo] = useState(newTodo)
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const [currentValue, setCurrentValue ] = useState("");
+
     const Window:{check: boolean, visibility: 'hidden'|'visible'}  = {
         check: true,
         visibility: 'hidden'
@@ -110,7 +112,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                 }
                 else {
                     setChangeWindow({check: false, visibility: 'visible'})
-                    console.log("Error")
+                    console.log("Method Error")
                     await delay(1500);
                     setChangeWindow({...changeWindow, visibility: 'hidden'})
                 }
@@ -118,12 +120,20 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         } catch (error) {
             const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
             setChangeWindow({check: false, visibility: 'visible'})
-            console.log("Error")
+            console.log("Error" + error)
             await delay(1500);
             setChangeWindow({...changeWindow, visibility: 'hidden'})
         }
 
     }
+
+    useEffect(() => {
+        if (textareaRef.current != null) {
+            textareaRef.current.style.height = "0px";
+            const scrollHeight = textareaRef.current.scrollHeight;
+            textareaRef.current.style.height = scrollHeight + "px";
+        }
+    }, [currentValue]);
 
     return (
         <section className={`${styles.EditPanel}`}>
@@ -154,7 +164,13 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                     )))}
                 </ul>
                 <h2>Описание</h2>
-                <textarea className={`${styles.InputEditName} ${styles.EditDescription}`} placeholder="..." value={changedTodo.description} onChange={(e) => handleChangeTodo(e, 'description')}/>
+                <textarea className={`${styles.InputEditName} ${styles.EditDescription}`}
+                          placeholder="..." value={changedTodo.description}
+                          ref={textareaRef}
+                          onChange={(e) => {
+                              handleChangeTodo(e, 'description')
+                              setCurrentValue(e.target.value);
+                          }}/>
                 <footer>
                     <button  className={`${styles.ButtonSave} ${styles.Card}`} onClick={()=> PutOrPostRequest(serverComponent.url, serverComponent.method, changedTodo)}>Сохранить</button>
                 </footer>

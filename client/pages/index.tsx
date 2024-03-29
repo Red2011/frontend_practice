@@ -8,7 +8,7 @@ import Fetch from "@/components/fetch/fetch";
 import Loader from "@/components/loader/loader";
 import Cookies from "cookies";
 import cookieCutter from '@boiseitguru/cookie-cutter'
-
+import Head from "next/head";
 
 export default function Main({
                                  todo,
@@ -124,66 +124,72 @@ export default function Main({
     }
 
     return (
-        <div className={styles.MainBlock}>
-            <nav className={styles.NavBar}>
-                <h1>
-                    Список задач (web)
-                </h1>
-            </nav>
-            <div className={styles.Component}>
-                <form className={styles.controlPanel}>
-                    <fieldset className={styles.fieldset}>
-                        <h2>СОРТИРОВКА</h2>
-                        <p className={styles.radioName}><input className={styles.radioControl} name="oldnew"
-                                                               type="radio" value={1} onChange={e => {
-                            setState(Number(e.target.value));
-                            setInput(true)
-                        }} checked={state === 1}/>Старые</p>
-                        <p className={styles.radioName}><input className={styles.radioControl} name="oldnew"
-                                                               type="radio" value={-1} onChange={e => {
-                            setState(Number(e.target.value));
-                            setInput(true)
-                        }} checked={state === -1}/>Новые</p>
-                    </fieldset>
-                    <fieldset className={styles.fieldset}>
-                        <h2>ПРИОРИТЕТ</h2>
-                        {priorities.priorities.map(priority => (
-                            <p key={priority._id} className={styles.radioName}><input type="checkbox"
-                                                                                      checked={checkPriorities.includes(`&priority=${priority._id}`)}
-                                                                                      onChange={() => {
-                                                                                          setCheckPriorities(handleFilterChange(`&priority=${priority._id}`, checkPriorities));
-                                                                                          setInput(true)
-                                                                                      }}/>{priority.priority_name}
-                            </p>
-                        ))}
-                        <h2>ОТМЕТКА</h2>
-                        {marks.marks.map(mark => (
-                            <p key={mark._id} className={styles.radioName}><input
-                                checked={checkMarks.includes(`&marks=${mark._id}`)} type="checkbox"
-                                onChange={() => {
-                                    setCheckMarks(handleFilterChange(`&marks=${mark._id}`, checkMarks));
-                                    setInput(true)
-                                }}/>{mark.mark_name}
-                            </p>
-                        ))}
-                    </fieldset>
-                </form>
-                <article className={styles.todoList}>
-                    <header className={styles.ButtonHeader}>
-                        <button className={`${styles.Card} ${styles.ButtonSave}`}
-                                onClick={() => router.push('/todos/edit_todo')}>Добавить задачу
-                        </button>
-                    </header>
-                    {checkLoaderForFilter()}
-                    <div className={`${styles.Loader}`} style={{display: checkLoader}}>
-                        <Loader/>
-                    </div>
-                </article>
+        <>
+            <Head>
+                <title>Список задач</title>
+            </Head>
+            <div className={styles.MainBlock}>
+                <nav className={styles.NavBar}>
+                    <h1>
+                        Список задач
+                    </h1>
+                </nav>
+                <div className={styles.Component}>
+                    <form className={styles.controlPanel}>
+                        <fieldset className={styles.fieldset}>
+                            <h2>СОРТИРОВКА</h2>
+                            <p className={styles.radioName}><input className={styles.radioControl} name="oldnew"
+                                                                   type="radio" value={1} onChange={e => {
+                                setState(Number(e.target.value));
+                                setInput(true)
+                            }} checked={state === 1}/>Старые</p>
+                            <p className={styles.radioName}><input className={styles.radioControl} name="oldnew"
+                                                                   type="radio" value={-1} onChange={e => {
+                                setState(Number(e.target.value));
+                                setInput(true)
+                            }} checked={state === -1}/>Новые</p>
+                        </fieldset>
+                        <fieldset className={styles.fieldset}>
+                            <h2>ПРИОРИТЕТ</h2>
+                            {priorities.priorities.map(priority => (
+                                <p key={priority._id} className={styles.radioName}><input type="checkbox"
+                                                                                          checked={checkPriorities.includes(`&priority=${priority._id}`)}
+                                                                                          onChange={() => {
+                                                                                              setCheckPriorities(handleFilterChange(`&priority=${priority._id}`, checkPriorities));
+                                                                                              setInput(true)
+                                                                                          }}/>{priority.priority_name}
+                                </p>
+                            ))}
+                            <h2>ОТМЕТКА</h2>
+                            {marks.marks.map(mark => (
+                                <p key={mark._id} className={styles.radioName}><input
+                                    checked={checkMarks.includes(`&marks=${mark._id}`)} type="checkbox"
+                                    onChange={() => {
+                                        setCheckMarks(handleFilterChange(`&marks=${mark._id}`, checkMarks));
+                                        setInput(true)
+                                    }}/>{mark.mark_name}
+                                </p>
+                            ))}
+                        </fieldset>
+                    </form>
+                    <article className={styles.todoList}>
+                        <header className={styles.ButtonHeader}>
+                            <button className={`${styles.Card} ${styles.ButtonSave}`}
+                                    onClick={() => router.push('/todos/edit_todo')}>Добавить задачу
+                            </button>
+                        </header>
+                        {checkLoaderForFilter()}
+                        <div className={`${styles.Loader}`} style={{display: checkLoader}}>
+                            <Loader/>
+                        </div>
+                    </article>
+                </div>
+                {/*<div ref={ref}>*/}
+                {/*    Loading...*/}
+                {/*</div>*/}
             </div>
-            {/*<div ref={ref}>*/}
-            {/*    Loading...*/}
-            {/*</div>*/}
-        </div>
+        </>
+
     )
 
 }
@@ -191,7 +197,6 @@ export default function Main({
 
 export const getServerSideProps = (async ({req, res}) => {
     try {
-        console.log(process.env.API_URL)
         const API_URL = (process.env.API_URL === undefined) ? "localhost:5000" : process.env.API_URL
         const cookies = new Cookies(req, res);
         const cookieDateSort = (cookies.get('date_sort') || "-1");

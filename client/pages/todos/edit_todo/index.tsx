@@ -4,6 +4,7 @@ import EditTodoItem from "@/components/Todo/EditTodoItem";
 import {Marks, Priorities, Todo} from "@/types/todo";
 import Fetch from "@/components/fetch/fetch";
 import {GetServerSideProps, InferGetServerSidePropsType} from "next";
+import Head from "next/head";
 
 const EditTodo = ({marks, priorities}:InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const emptyTodo: Todo = {
@@ -23,16 +24,21 @@ const EditTodo = ({marks, priorities}:InferGetServerSidePropsType<typeof getServ
 
     }
     return (
-        <div className={styles.MainBlock}>
-            <nav className={styles.NavBar}>
-                <h1>
-                    Редактирование
-                </h1>
-            </nav>
-            <div className={styles.Component}>
-                <EditTodoItem todo={emptyTodo} marks={marks} priorities={priorities}/>
+        <>
+            <Head>
+               <title>Создание задачи</title>
+            </Head>
+            <div className={styles.MainBlock}>
+                <nav className={styles.NavBar}>
+                    <h1>
+                        Редактирование
+                    </h1>
+                </nav>
+                <div className={styles.Component}>
+                    <EditTodoItem todo={emptyTodo} marks={marks} priorities={priorities}/>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

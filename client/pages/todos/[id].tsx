@@ -8,6 +8,7 @@ import {useRouter} from "next/router";
 import {format} from "date-fns";
 import {ru} from "date-fns/locale";
 import TrueWindow from "@/components/TrueWindow/TrueWindow";
+import Head from "next/head";
 
 export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter()
@@ -60,41 +61,46 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
 
 
     return (
-        <div className={styles.MainBlock}>
-            <TrueWindow check={changeWindow.check} visibility={changeWindow.visibility}/>
-            <nav className={styles.NavBar}>
-                <h1>
-                    Просмотр
-                </h1>
-            </nav>
-            <div className={styles.Component}>
-                <section className={`${todoStyles.EditPanel}`}>
-                    <header className={styles.HeaderButtons}>
-                        <button className={`${todoStyles.ButtonBack} ${todoStyles.Card}`} onClick={() => router.push('/')}>Назад</button>
-                        <div className={styles.EditAndDeleteButtons}>
-                            <button className={`${styles.ButtonBack} ${styles.Card} ${styles.EditButton}`} onClick={() => router.push(`/todos/edit_todo/${id}`)}>Редактировать</button>
-                            <button className={`${styles.ButtonBack} ${styles.Card} ${styles.DelButton}`} onClick={async ()=> DelRequest(url)}>Удалить</button>
+        <>
+            <Head>
+                <title>{todo.name}</title>
+            </Head>
+            <div className={styles.MainBlock}>
+                <TrueWindow check={changeWindow.check} visibility={changeWindow.visibility}/>
+                <nav className={styles.NavBar}>
+                    <h1>
+                        Просмотр
+                    </h1>
+                </nav>
+                <div className={styles.Component}>
+                    <section className={`${todoStyles.EditPanel}`}>
+                        <header className={styles.HeaderButtons}>
+                            <button className={`${todoStyles.ButtonBack} ${todoStyles.Card}`} onClick={() => router.push('/')}>Назад</button>
+                            <div className={styles.EditAndDeleteButtons}>
+                                <button className={`${styles.ButtonBack} ${styles.Card} ${styles.EditButton}`} onClick={() => router.push(`/todos/edit_todo/${id}`)}>Редактировать</button>
+                                <button className={`${styles.ButtonBack} ${styles.Card} ${styles.DelButton}`} onClick={async ()=> DelRequest(url)}>Удалить</button>
+                            </div>
+                        </header>
+                        <div className={`${todoStyles.Card} ${todoStyles.EditCard} ${styles.ViewPanel}`}>
+                            <h2 className={styles.ViewHeading}>НАЗВАНИЕ ЗАДАЧИ</h2>
+                            <h3>{todo.name}</h3>
+                            <h2 className={styles.ViewHeading}>ДАТА СОЗДАНИЯ</h2>
+                            <h3>{formattedDate}</h3>
+                            <h2 className={styles.ViewHeading}>ПРИОРИТЕТ</h2>
+                            <h3>{todo.priority.priority_name}</h3>
+                            <h2 className={styles.ViewHeading}>ОТМЕТКИ</h2>
+                            <h3>
+                                {todo.mark.map((item: Mark) => (
+                                    item.mark_name + " "
+                                ))}
+                            </h3>
+                            <h2 className={styles.ViewHeading}>ОПИСАНИЕ</h2>
+                            <h3>{description}</h3>
                         </div>
-                    </header>
-                    <div className={`${todoStyles.Card} ${todoStyles.EditCard} ${styles.ViewPanel}`}>
-                        <h2 className={styles.ViewHeading}>НАЗВАНИЕ ЗАДАЧИ</h2>
-                        <h3>{todo.name}</h3>
-                        <h2 className={styles.ViewHeading}>ДАТА СОЗДАНИЯ</h2>
-                        <h3>{formattedDate}</h3>
-                        <h2 className={styles.ViewHeading}>ПРИОРИТЕТ</h2>
-                        <h3>{todo.priority.priority_name}</h3>
-                        <h2 className={styles.ViewHeading}>ОТМЕТКИ</h2>
-                        <h3>
-                            {todo.mark.map((item: Mark) => (
-                                item.mark_name + " "
-                            ))}
-                        </h3>
-                        <h2 className={styles.ViewHeading}>ОПИСАНИЕ</h2>
-                        <h3>{description}</h3>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
