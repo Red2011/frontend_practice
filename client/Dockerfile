@@ -13,10 +13,12 @@ COPY . .
 
 RUN npm install
 
+RUN npm run build
+
 ENV API_URL my-api:5000
 
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start"]
 
 
 
