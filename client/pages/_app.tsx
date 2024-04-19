@@ -7,7 +7,7 @@ import Wraploader from "../components/loader/Wraploader"
 
 export default function App({ Component, pageProps }: AppProps) {
     const [isLoading, setIsLoading] = useState(false);
-
+    //отображение лоадера при пееремещении между страницами в зависимости от загрузки данных
     useEffect(() => {
         Router.events.on("routeChangeStart", ()=>{
             setIsLoading(true)

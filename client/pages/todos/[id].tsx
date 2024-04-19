@@ -12,22 +12,31 @@ import Head from "next/head";
 
 export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter()
+    //получение id из url
     const {id} = router.query;
+    //отформатированная дата
     const [formattedDate, setFormattedDate] = useState<string>()
+    //проверка на пустоту значения описания
     const description  = todo.description.length > 0 ? todo.description: "...";
     const url = `http://localhost:5000/todos/${id}`;
 
+    //форматирование даты на клиенте
     useEffect(() => {
         setFormattedDate(format(todo.creation_date, 'd MMMM yyyy, HH:mm', {locale: ru}))
     }, []);
 
+
+    //показ окна о выполнении запроса
     const Window:{check: boolean, visibility: 'hidden'|'visible'}  = {
         check: true,
         visibility: 'hidden'
     }
     const [changeWindow, setChangeWindow] = useState(Window)
+
+    //логика DELETE запроса
     const DelRequest = async (url: string) => {
         try {
+            //добавление функции задержки
             const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
             const res = await fetch(url, {
                 method: "DELETE",
@@ -35,12 +44,16 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
                     "Content-Type": "application/json",
                 }
             })
+            // проверка на успешность выполенния запроса
+            //запрос возвращает id, который мы потом сравниваем
             const data: {id: string} = await res.json();
             if (res.status == 200 && data.id == id) {
+                //показ окна о состоянии запроса
                 setChangeWindow({check: true, visibility: 'visible'})
                 console.log("Delete: OK")
                 await delay(1500);
                 setChangeWindow({...changeWindow, visibility: 'hidden'})
+                //возврат на предыдущую страницу после удаления задачи
                 router.back()
             }
             else {
@@ -66,6 +79,7 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
                 <title>{todo.name}</title>
             </Head>
             <div className={styles.MainBlock}>
+                {/*окно состояния запроса*/}
                 <TrueWindow check={changeWindow.check} visibility={changeWindow.visibility}/>
                 <nav className={styles.NavBar}>
                     <h1>
@@ -105,6 +119,8 @@ export default function TodoPage({todo}:InferGetServerSidePropsType<typeof getSe
 };
 
 
+//серверный компонент
+//params содержит в себе id задачи
 export const getServerSideProps: GetServerSideProps = (async ({params}) => {
     try {
         const API_URL = (process.env.API_URL === undefined) ? "localhost:5000" : process.env.API_URL

@@ -1,4 +1,4 @@
-
+//используемые типы входящих данных
 export interface Priority {
     "_id": string,
     "priority_name": string

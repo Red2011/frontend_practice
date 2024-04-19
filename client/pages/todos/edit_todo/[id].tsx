@@ -7,6 +7,7 @@ import Fetch from "@/components/fetch/fetch";
 import Head from "next/head";
 
 const UpdateTodo = ({todo, marks, priorities}:InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    //страница с уже созданной задачей
     return (
         <>
             <Head>

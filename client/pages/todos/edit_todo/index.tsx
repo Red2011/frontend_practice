@@ -7,6 +7,7 @@ import {GetServerSideProps, InferGetServerSidePropsType} from "next";
 import Head from "next/head";
 
 const EditTodo = ({marks, priorities}:InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    //пустая задача для отображения на экране при создании новой
     const emptyTodo: Todo = {
         _id: "",
         name: "",

@@ -7,6 +7,7 @@ interface Windows {
     visibility: 'hidden' | 'visible'
 }
 
+//информационное окно
 const TrueWindow: React.FC<Windows> = ({check, visibility}) => {
 
     const TrueCheck = () => {
@@ -44,6 +45,7 @@ const TrueWindow: React.FC<Windows> = ({check, visibility}) => {
         )
     }
 
+    //выбор отображаемого содержимого окна в зависимости от check
     if (check) {
         return (
             <div className={styles.wrapper} style={{visibility: visibility}}>

@@ -7,19 +7,24 @@ import { ru } from 'date-fns/locale';
 
 
 const TodoItem: React.FC<TodoItemProps> = ({todo}) => {
+    //компонент отображающий одну задачу
     const router = useRouter()
     const [formattedDate, setFormatedDate] = useState<string>()
 
+    //функция для преобразования часов в слова, учитывая склонение
     const getHours = (hours: number) => {
         let titles = ['час', 'часа', 'часов']
         let cases = [2, 0, 1, 1, 1, 2];
         return titles[(hours % 100 > 4 && hours % 100 < 20) ? 2 : cases[(hours % 10 < 5) ? hours % 10 : 5]]
     }
+    //функция аналогичная минутам
     const getMinutes = (minutes: number) => {
         let titles = ['минуту', 'минуты', 'минут']
         let cases = [2, 0, 1, 1, 1, 2];
         return titles[(minutes % 100 > 4 && minutes % 100 < 20) ? 2 : cases[(minutes % 10 < 5) ? minutes % 10 : 5]]
     }
+
+    //форматирование даты
     useEffect(() => {
         const nowDate = new Date();
         const todoDate = new Date(todo.creation_date)
@@ -32,10 +37,12 @@ const TodoItem: React.FC<TodoItemProps> = ({todo}) => {
         }
         else {
             const hoursAgo = Math.floor(datesMinutes / 60)
+            //locale ru - русский текст месяцев
             setFormatedDate((hoursAgo < 24) ? `${hoursAgo} ${getHours(hoursAgo)} назад` : format(todo.creation_date, 'd MMMM yyyy, HH:mm', {locale: ru}))
         }
     }, []);
 
+    //проверка на присутствие у задачи отметок (marks)
     const checkEmptyMarks = () => {
         if (todo.mark.length > 0){
             return (
@@ -50,6 +57,7 @@ const TodoItem: React.FC<TodoItemProps> = ({todo}) => {
     }
     return (
         <ul className={styles.Card}>
+            {/*переход на новую страницу*/}
             <li className={styles.CardName} onClick={() => router.push('/todos/' + todo._id)}>{todo.name}</li>
             <li className={styles.CardInfo} >создано: {formattedDate}</li>
             <li className={styles.CardInfo}>Приоритет: {todo.priority.priority_name}</li>

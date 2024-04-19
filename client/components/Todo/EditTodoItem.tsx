@@ -5,6 +5,7 @@ import {useRouter} from "next/router";
 import TrueWindow from "@/components/TrueWindow/TrueWindow";
 
 
+//выбор необходимого метода запроса: создание новой задачи, или обновление информации в задаче
 const changeServerMethod = (id:string|undefined) => {
     let url: string;
     let method: "POST" | "PUT";
@@ -21,12 +22,16 @@ const changeServerMethod = (id:string|undefined) => {
 
 const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorities }> = ({ todo, marks, priorities }) => {
     const router = useRouter()
+    //получение id задачи
     const {id} = router.query;
+    //выбор метода запроса
     const serverComponent = changeServerMethod(typeof id === 'string' ? id : undefined);
+    //проверка на пустоту значений отметок и приоритетов по их id
     let markList = todo.mark.map(item => item._id)
     markList = markList.length === 1 && markList[0] === "" ? [] : markList;
     const priority = todo.priority._id === "" ? priorities.priorities[0]._id : todo.priority._id
 
+    //объект с новой задачей, который будет отправляться в запросе
     const newTodo = {
         name: todo.name,
         creation_date: todo.creation_date,
@@ -34,17 +39,28 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         mark: markList,
         description: todo.description
     }
+
+    //состояние для изменения объекта
     const [changedTodo, setChangedTodo] = useState(newTodo)
+
+    //сохранение dom-элемент textarea в переменной
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    //изменение текста textarea
     const [currentValueTextArea, setcurrentValueTextArea ] = useState("");
 
+
+    //окно с результатом запроса
     const Window:{check: boolean, visibility: 'hidden'|'visible'}  = {
         check: true,
         visibility: 'hidden'
     }
     const [changeWindow, setChangeWindow] = useState(Window)
+
+    //изменение цвета input с названием задачи в зависимости от пустоты
     const [inputColor, setInputColor] = useState('#F34949')
 
+
+    //конструктор проверки на включение элемента в массив, с последующим удалением или добавлением
     const handleFilterChange = (filter_id:string, filterList: string[]) => {
         if (filterList.includes(filter_id)) {
             return filterList.filter((element) => element !== filter_id)
@@ -54,6 +70,8 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         }
     }
 
+
+    //изменение любого поля у объекта с задачей
     const handleChangeTodo = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | string[], newValue: keyof Todo) => {
         if (Array.isArray(e))
             setChangedTodo({...changedTodo, [newValue]: e})
@@ -61,6 +79,9 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
             setChangedTodo({...changedTodo, [newValue]: e.target.value});
         }
     }
+
+    //изменение цвета отметки, если она выбрана (присутствует в массиве отметок)
+    //массив отметок берется из changedTodo, а изменяется с помощью handleChangeTodo
     const changeColor = (idList:string[], id:string) => {
         if (idList.includes(id)) {
             return '#CECECE'
@@ -70,6 +91,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         }
     }
 
+    //подсвечивание рамки input с названием задачи
     useEffect(() => {
         if (changedTodo.name === "") {
             setInputColor('#F34949')
@@ -79,10 +101,21 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         }
     }, [changedTodo.name])
 
+
+    //функция с выполнением Put или Post запроса в зависимости от результата changeServerMethod
+    //вызывается кнопкой Сохранить
     const PutOrPostRequest = async (url: string, method: string, todo_data: any) => {
         try {
             const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-            setChangedTodo({...changedTodo, creation_date: new Date()})
+            //Посмотреть, эта строчка не учитывается, т.к. время мы используем todo_data
+            //а setChangedTodo отрабатывает после
+            //дата в итоге берется из index
+            //setChangedTodo({...changedTodo, name: "sss"})
+            //сделать правильное поведение даты, т.к. она не успевает установиться правильно, fetch быстрее
+
+
+            //запрет на сохранение при пустом name (показывается окно с ошибкой)
+            //добавить если человек просто напишет пробел
             if (todo_data.name === "") {
                 setChangeWindow({check: false, visibility: 'visible'})
                 console.log("Error")
@@ -90,6 +123,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                 setChangeWindow({...changeWindow, visibility: 'hidden'})
             }
             else {
+                //отправка на сервер json при запросе
                 const res = await fetch(url, {
                     method: method,
                     headers: {
@@ -98,12 +132,14 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                     body: JSON.stringify(todo_data)
                 })
                 const data:Todo = await res.json()
+                //успешная обработка post запроса
                 if (res.status == 201) {
                     setChangeWindow({check: true, visibility: 'visible'})
                     console.log("Create: OK")
                     await delay(1500);
                     router.back()
                 }
+                //успешная обработка put запроса
                 else if (res.status == 200 && data._id === id) {
                     setChangeWindow({check: true, visibility: 'visible'})
                     console.log("Update: OK")
@@ -126,7 +162,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
         }
 
     }
-
+    //изменение высоты textarea в зависимости от количества занимаемых строк текстом
     useEffect(() => {
         if (textareaRef.current != null) {
             textareaRef.current.style.height = "0px";
@@ -134,6 +170,8 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
             textareaRef.current.style.height = scrollHeight + "px";
         }
     }, [currentValueTextArea]);
+
+
 
     return (
         <section className={`${styles.EditPanel}`}>
@@ -148,6 +186,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                 <h2>Приоритет</h2>
                 <select className={`${styles.InputEditName} ${styles.SelectPriorityAndMarks}`}
                         value={changedTodo.priority}
+                        /*запись в объект значения выбранного приоритета*/
                         onChange={(e) => handleChangeTodo(e, 'priority')}>
                     {priorities.priorities.map(priority => (
                         <option key={priority._id} value={priority._id}>{priority.priority_name}</option>
@@ -159,6 +198,7 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                         <li key={mark._id}
                             className={styles.MarkName}
                             style={{backgroundColor: changeColor(changedTodo.mark, mark._id)}}
+                            /*запись в объект массива отметок при выделении/отмене выделения*/
                             onClick={() => handleChangeTodo(handleFilterChange(mark._id, changedTodo.mark), 'mark')}>{mark.mark_name}
                         </li>
                     )))}
@@ -172,7 +212,9 @@ const EditTodoItem: React.FC<TodoItemProps & { marks: Marks; priorities: Priorit
                               setcurrentValueTextArea(e.target.value);
                           }}/>
                 <footer>
-                    <button  className={`${styles.ButtonSave} ${styles.Card}`} onClick={()=> PutOrPostRequest(serverComponent.url, serverComponent.method, changedTodo)}>Сохранить</button>
+                    <button  className={`${styles.ButtonSave} ${styles.Card}`} onClick={()=> {
+                        PutOrPostRequest(serverComponent.url, serverComponent.method, changedTodo)
+                    }}>Сохранить</button>
                 </footer>
             </div>
         </section>

@@ -7,6 +7,7 @@ import {Priority, PrioritySchema} from "./schemas/priority.schemas";
 import {Mark} from "./schemas/mark.schemas";
 
 
+//включение в логику задач: соответствие схем объектов с mongo, контроллера запросов и используемых функций
 @Module({
     imports: [
       MongooseModule.forFeature([{name: Todo.name, schema: TodoSchema}]),

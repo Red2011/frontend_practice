@@ -7,6 +7,7 @@ interface TodoListProps {
 }
 
 const TodoList:React.FC<TodoListProps> = ({todos}) => {
+    //компонент с задачами
     // const router = useRouter()
     const checkEmptyTodos = () => {
         if (todos.length > 0) {

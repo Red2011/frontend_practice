@@ -6,6 +6,8 @@ import {Mark} from "./mark.schemas";
 
 export type TodoDocument = HydratedDocument<Todo>;
 
+//структура задачи с вторичными ключами массива отметок и приоритета
+//первичные ключи mongo создаёт автоматически при новой записи
 @Schema()
 export class Todo {
 

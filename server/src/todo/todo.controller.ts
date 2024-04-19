@@ -5,10 +5,12 @@ import {ObjectId, SortOrder} from "mongoose";
 import {Todo} from "./schemas/todo.schema";
 
 
+//контроллер работающий с функциями из service
 @Controller('/todos')
 export class TodoController{
     constructor(private todoService: TodoService) { }
 
+    //связь функций с запросами
     @Post() //передам в json
     createTodo(@Body() dto: CreateTodoDto){
         return this.todoService.createTodo(dto);
@@ -33,7 +35,7 @@ export class TodoController{
         return this.todoService.getAllMarks();
     }
 
-    @Get(':id') //то что после слеша
+    @Get(':id') //id из ссылки example.com/id
     getOneTodo(@Param('id') id: ObjectId) {
         return this.todoService.getOneTodo(id);
     }

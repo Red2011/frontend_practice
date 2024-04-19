@@ -1,3 +1,4 @@
+//получение данных с помощью fetch
 async function Fetch(url:string) {
     try {
         const res = await fetch(url)

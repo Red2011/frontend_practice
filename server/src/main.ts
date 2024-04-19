@@ -3,6 +3,7 @@ import {AppModule} from "./app.module";
 import * as process from "process";
 
 
+//запуск сервера
 const start = async () => {
     try {
         const PORT = process.env.PORT || 5000;
