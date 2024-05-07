@@ -9,6 +9,8 @@ import Loader from "@/components/loader/loader";
 import Cookies from "cookies";
 import cookieCutter from '@boiseitguru/cookie-cutter'
 import Head from "next/head";
+import {useInView} from "react-intersection-observer";
+
 
 export default function Main({
                                  todo,
@@ -38,32 +40,35 @@ export default function Main({
     // const {ref, inView} = useInView();
 
     //проверка на скроллинг
-    const [checkScroll, setcheckScroll] = useState(false);
+   // const [checkScroll, setcheckScroll] = useState(false);
+
+    //intersection observer для загрузки данных при отображении loader
+    const {inView, ref, entry} = useInView();
 
     //текущее состояние требования загрузки новых задач
     const [moreTodosState, setMoreTodosState] = useState(true)
 
     //показ loader при загрузке новых задач
-    const [checkLoader, setCheckLoader] = useState<'none' | 'flex'>('none')
+    const [checkLoader, setCheckLoader] = useState<'none' | 'flex'>('flex')
 
 
     //состояние отображения спинера при загрузке данных после применения фильтров (инвертирован)
     const [filterLoad, setFilterLoad] = useState(true)
 
     //хендлер для срабатывания скролла при приблежении к низу страницы
-    const handler = (e: any) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < e.target.documentElement.scrollHeight / 100 * 15) {
-            setcheckScroll(true)
-        }
-    }
+    // const handler = (e: any) => {
+    //     if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < e.target.documentElement.scrollHeight / 100 * 15) {
+    //         setcheckScroll(true)
+    //     }
+    // }
 
     //создание слушателя для скролла
-    useEffect(() => {
-        document.addEventListener('scroll', handler)
-        return () => {
-            document.removeEventListener('scroll', handler)
-        }
-    }, [])
+    // useEffect(() => {
+    //     document.addEventListener('scroll', handler)
+    //     return () => {
+    //         document.removeEventListener('scroll', handler)
+    //     }
+    // }, [])
 
 
     //констуктор проверки на включение элемента в массив, с последующим удалением или добавлением
@@ -80,18 +85,19 @@ export default function Main({
         try {
             //проверка разрешения на загрузку новых задач
             if (moreTodosState) {
-                setCheckLoader('flex')
                 const nextTodoList = offset + 15;
                 const newTodos = await Fetch(`http://localhost:5000/todos?date_sort=${state}&offset=${nextTodoList}${checkMarks.join("")}${checkPriorities.join("")}`)
                 if (newTodos) {
-                    setCheckLoader('none')
+                    //setCheckLoader('none')
                     //добавление новых задач в общий массив
                     setTodos((prevTodos: Todo[]) => [...prevTodos, ...newTodos]);
                     setOffset(nextTodoList);
-                    setcheckScroll(false)
+                    //setcheckScroll(false)
                     if (newTodos.length < 1) {
                         //отмена разрешения на загрузку, когда задач больше нет
                         setMoreTodosState(false)
+                        //смена отображения loader для загрузки новых данных при пагинации
+                        setCheckLoader('none')
                     }
                 }
             }
@@ -123,6 +129,8 @@ export default function Main({
                 setFilterLoad(true)
                 setTodos(NewSortData);
                 setInput(false)
+                //отоюражение loader после изменения фильтра
+                setCheckLoader('flex');
             }
         } catch (error) {
             console.error("Error: " + error)
@@ -135,13 +143,16 @@ export default function Main({
     //при изменении элементов фильтра и скролла
     useEffect(() => {
         if (changeInput) {
+            setCheckLoader('none');
             changeDateSort().then(r => console.log("Sort change OK"));
         }
-        if (checkScroll) {
+        if (inView) {
+            setCheckLoader('flex')
             loadMoreTodos().then(r => console.log("View loader OK"));
         }
-    }, [checkScroll, changeInput]);
+    }, [inView, changeInput]);
 
+    //checkScroll
 
     //отображение лоадера, пока задачи не загружены
     const checkLoaderForFilter = () => {
@@ -220,7 +231,7 @@ export default function Main({
                             </button>
                         </header>
                         {checkLoaderForFilter()}
-                        <div className={`${styles.Loader}`} style={{display: checkLoader}}>
+                        <div ref={ref} className={`${styles.Loader}`} style={{display: checkLoader}}>
                             <Loader/>
                         </div>
                     </article>
