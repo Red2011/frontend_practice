@@ -231,7 +231,7 @@ export default function Main({
                             </button>
                         </header>
                         {checkLoaderForFilter()}
-                        <div ref={ref} className={`${styles.Loader}`} style={{display: checkLoader}}>
+                        <div ref={ref} className={`${styles.Loader}`} style={{display: checkLoader, paddingBottom: "20px"}}>
                             <Loader/>
                         </div>
                     </article>
