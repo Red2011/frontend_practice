@@ -236,9 +236,6 @@ export default function Main({
                         </div>
                     </article>
                 </div>
-                {/*<div ref={ref}>*/}
-                {/*    Loading...*/}
-                {/*</div>*/}
             </div>
         </>
 
